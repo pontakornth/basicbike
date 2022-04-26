@@ -44,6 +44,13 @@ public class Bike {
     @Column(nullable = false)
     private int ratePerHour;
 
+    public Bike(String model, String type, double size, int ratePerHour) {
+        this.model = model;
+        this.type = type;
+        this.size = size;
+        this.ratePerHour = ratePerHour;
+    }
+
 
     public long getId() {
         return id;
