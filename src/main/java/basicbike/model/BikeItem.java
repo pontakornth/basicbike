@@ -1,5 +1,10 @@
 package basicbike.model;
 
+import basicbike.dao.BikeItemDaoImpl;
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -10,7 +15,7 @@ import java.util.Date;
  *
  * @see Bike
  */
-@Entity(name = "bike_item")
+@DatabaseTable(daoClass = BikeItemDaoImpl.class,tableName = "bike_item")
 public class BikeItem {
 
     /**
@@ -52,7 +57,7 @@ public class BikeItem {
      * <p>
      * It is meaningful when the renterId is not null.
      */
-    @Column()
+    @DatabaseField(dataType = DataType.DATE_STRING)
     private Date rentStartTime;
 
     // Required by BikeItem

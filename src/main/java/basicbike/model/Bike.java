@@ -1,5 +1,8 @@
 package basicbike.model;
 
+import basicbike.dao.BikeDaoImpl;
+import com.j256.ormlite.table.DatabaseTable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,7 +13,7 @@ import javax.persistence.Id;
  * For the actual physical bike
  * @see BikeItem
  */
-@Entity
+@DatabaseTable(daoClass = BikeDaoImpl.class)
 public class Bike {
     /**
      * Unique identifier for a bike description
