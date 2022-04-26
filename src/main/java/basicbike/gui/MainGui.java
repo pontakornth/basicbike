@@ -4,6 +4,7 @@ import basicbike.dao.DaoFactory;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -46,8 +47,11 @@ public class MainGui extends JFrame {
             table = new JTable();
             DefaultTableModel model = new DefaultTableModel(data, columnName);
             table.setModel(model);
+            table.getColumn("Model").setPreferredWidth(200);
+//            table.setFillsViewportHeight(true);
+            table.setCellEditor(null);
             setLayout(new BorderLayout());
-            add(table, BorderLayout.SOUTH);
+            add(new JScrollPane(table), BorderLayout.SOUTH);
         }
     }
 
@@ -57,7 +61,7 @@ public class MainGui extends JFrame {
         this.filterPanel = new FilterPanel();
         this.resultTable = new ResultTable();
         add(filterPanel, BorderLayout.NORTH);
-        add(resultTable, BorderLayout.SOUTH);
+        add(resultTable, BorderLayout.CENTER);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
