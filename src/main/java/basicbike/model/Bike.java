@@ -6,6 +6,9 @@ import javax.persistence.Id;
 
 /**
  * Description of a bike
+ *
+ * For the actual physical bike
+ * @see BikeItem
  */
 @Entity
 public class Bike {
@@ -13,25 +16,25 @@ public class Bike {
      * Unique identifier for a bike description
      */
     @Id
-    public long id;
+    private long id;
 
     /**
      * Model of the bike
      */
     @Column(nullable = false)
-    public String model;
+    private String model;
 
     /**
      * Type of bike such as mountain bike.
      */
     @Column(nullable = false)
-    public String type;
+    private String type;
 
     /**
      * Size of a bike in inch unit
      */
     @Column(nullable = false)
-    public double size;
+    private double size;
 
     /**
      * Rate per hour
@@ -39,8 +42,31 @@ public class Bike {
      * The type is int to simplify the application.
      */
     @Column(nullable = false)
-    public int ratePerHour;
+    private int ratePerHour;
 
 
+    public long getId() {
+        return id;
+    }
 
+    public String getModel() {
+        return model;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public double getSize() {
+        return size;
+    }
+
+    public int getRatePerHour() {
+        return ratePerHour;
+    }
+
+    // Required by ORMlite
+    public Bike() {
+
+    }
 }
