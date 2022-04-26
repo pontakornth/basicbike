@@ -63,6 +63,7 @@ public class MainGui extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
+                // Close connection with database when the application closes.
                 daoFactory.closeConnection();
             }
         });
