@@ -1,6 +1,6 @@
 # Basic Bike
 
-Mock application for bike renting business
+Mock application for bike renting business. The purpose is for demonstrating usage of JPA and Ormlite.
 
 ## What can it do?
 1. User can search bike of their choice.
@@ -23,3 +23,8 @@ Mock application for bike renting business
    .import data/bike_item.csv bike_item
    ```
 4. After that, the application should have data available.
+
+## Progress
+- [x] Model and DAOs
+- [ ] Application GUI
+- [ ] Application logic
