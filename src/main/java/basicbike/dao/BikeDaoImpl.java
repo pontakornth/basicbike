@@ -8,8 +8,7 @@ import java.sql.SQLException;
 
 public class BikeDaoImpl extends BaseDaoImpl<Bike, Long> implements BikeDao {
 
-    // TODO: Make it protected
-    public BikeDaoImpl(ConnectionSource connectionSource) throws SQLException {
+    protected BikeDaoImpl(ConnectionSource connectionSource) throws SQLException {
         super(connectionSource, Bike.class);
     }
 }

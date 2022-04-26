@@ -8,8 +8,7 @@ import java.sql.SQLException;
 import java.util.Date;
 
 public class BikeItemDaoImpl extends BaseDaoImpl<BikeItem, Long> implements BikeItemDao {
-    // TODO: Make it protected
-    public BikeItemDaoImpl(ConnectionSource connectionSource) throws SQLException {
+    protected BikeItemDaoImpl(ConnectionSource connectionSource) throws SQLException {
         super(connectionSource, BikeItem.class);
     }
 
