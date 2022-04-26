@@ -2,13 +2,10 @@ package basicbike;
 
 import basicbike.dao.*;
 import basicbike.gui.MainGui;
-import basicbike.model.Bike;
-import basicbike.model.BikeItem;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 
 import java.sql.SQLException;
-import java.util.Date;
 
 public class Main {
     public static void main(String[] args) {
