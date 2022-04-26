@@ -35,4 +35,12 @@ public class DaoFactory {
         }
         return bikeItemDao;
     }
+
+    public void closeConnection() {
+        try {
+            connectionSource.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
