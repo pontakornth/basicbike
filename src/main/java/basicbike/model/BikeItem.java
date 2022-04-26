@@ -10,7 +10,7 @@ import java.util.Date;
  *
  * @see Bike
  */
-@Entity
+@Entity(name = "bike_item")
 public class BikeItem {
 
     /**
@@ -60,6 +60,17 @@ public class BikeItem {
 
     }
 
+    public BikeItem(Bike bike, String bikeItemId, String renterId, Date rentStartTime) {
+        this.bike = bike;
+        this.bikeItemId = bikeItemId;
+        this.renterId = renterId;
+        this.rentStartTime = rentStartTime;
+    }
+
+    public BikeItem(Bike bike, String bikeItemId) {
+        this(bike, bikeItemId, null ,null);
+    }
+
     public long getId() {
         return id;
     }
@@ -78,5 +89,19 @@ public class BikeItem {
 
     public Date getRentStartTime() {
         return rentStartTime;
+    }
+
+    /**
+     * Rent the bike at a certain time.
+     * @param renterId ID of the renter. It can be either Thai National ID or Passport number.
+     * @param rentStartTime Starting time of renting.
+     * @throws RuntimeException Someone already rented the bike.
+     */
+    public void rent(String renterId, Date rentStartTime) throws RuntimeException {
+        if (this.renterId != null)
+            throw new RuntimeException("The bike is already rented.");
+
+        this.renterId = renterId;
+        this.rentStartTime = rentStartTime;
     }
 }
