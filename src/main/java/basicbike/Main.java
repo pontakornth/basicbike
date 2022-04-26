@@ -12,13 +12,14 @@ public class Main {
         System.out.println("And here we are!");
         ConnectionSource connectionSource = null;
         try {
+            // TODO: Allow connection string to change
             connectionSource = new JdbcConnectionSource("jdbc:sqlite:database.db");
             DaoFactory daoFactory = new DaoFactory(connectionSource);
             MainGui mainGui = new MainGui(daoFactory);
             mainGui.start();
 
         } catch (Exception e) {
-            // If something bad happens, the program must close the connnection.
+            // If something bad happens, the program must close the connection.
             if (connectionSource != null) {
                 connectionSource.close();
             }
