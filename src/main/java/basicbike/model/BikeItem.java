@@ -96,20 +96,6 @@ public class BikeItem {
         return rentStartTime;
     }
 
-    /**
-     * Rent the bike at a certain time.
-     * @param renterId ID of the renter. It can be either Thai National ID or Passport number.
-     * @param rentStartTime Starting time of renting.
-     * @throws RuntimeException Someone already rented the bike.
-     */
-    public void rent(String renterId, Date rentStartTime) throws RuntimeException {
-        if (this.renterId != null)
-            throw new RuntimeException("The bike is already rented.");
-
-        this.renterId = renterId;
-        this.rentStartTime = rentStartTime;
-    }
-
     public void setRenterId(String renterId) {
         this.renterId = renterId;
     }
