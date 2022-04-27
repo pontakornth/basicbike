@@ -25,7 +25,6 @@ public class MainGui extends JFrame {
     private final ResultTable resultTable;
     private final ActionPanel actionPanel;
     private final List<BikeItem> items;
-    private int selectedIndex = 1;
 
     private static class FilterPanel extends JPanel {
         public final JLabel modelInputLabel;
@@ -196,6 +195,5 @@ public class MainGui extends JFrame {
     }
 
     public void setSelectedIndex(int selectedIndex) {
-        this.selectedIndex = selectedIndex;
     }
 }
