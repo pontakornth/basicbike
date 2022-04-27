@@ -23,7 +23,7 @@ public class MainGui extends JFrame {
     private final FilterPanel filterPanel;
     private final ResultTable resultTable;
     private final ActionPanel actionPanel;
-    private List<BikeItem> items;
+    private final List<BikeItem> items;
 
     private static class FilterPanel extends JPanel {
         public final JLabel modelInputLabel;
@@ -94,8 +94,7 @@ public class MainGui extends JFrame {
     private ActionListener getRentAction() {
         return e -> {
             // TODO: Add checking if the bike is already rented.
-            DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            DateFormat timeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             // The constructor automatically set the current time.
             Date currentDate = new Date();
 
@@ -113,16 +112,10 @@ public class MainGui extends JFrame {
             JTextField timeInput = new JTextField();
             timeInput.setColumns(20);
             timeInput.setText(timeFormat.format(currentDate));
-            JLabel dateLabel = new JLabel("Date");
-            JTextField dateInput = new JTextField();
-            dateInput.setColumns(20);
-            dateInput.setText(dateFormat.format(currentDate));
 
 
             panel.add(idLabel);
             panel.add(idInput);
-            panel.add(dateLabel);
-            panel.add(dateInput);
             panel.add(timeLabel);
             panel.add(timeInput);
             int result = JOptionPane.showConfirmDialog(null, panel, "Rent",
@@ -132,7 +125,14 @@ public class MainGui extends JFrame {
                     JOptionPane.showMessageDialog(null, "You didn't select any bike.", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     BikeItem bikeItem = items.get(resultTable.table.getSelectedRow());
-                    JOptionPane.showMessageDialog(null ,bikeItem.getBike().getModel(), "Success", JOptionPane.INFORMATION_MESSAGE);
+                    try {
+                        Date rentStartTime = timeFormat.parse(timeInput.getText());
+                        String renterId = idInput.getText();
+                        bikeRental.rentBikeItem(bikeItem, renterId , rentStartTime);
+                        JOptionPane.showMessageDialog(null ,bikeItem.getBike().getModel(), "Success", JOptionPane.INFORMATION_MESSAGE);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null , "Error " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         };

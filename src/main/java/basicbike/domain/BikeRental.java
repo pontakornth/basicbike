@@ -7,6 +7,7 @@ import basicbike.model.BikeItem;
 import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -45,5 +46,29 @@ public class BikeRental {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Rent the bike item on specific date.
+     * @param bikeItem BikeItem to rent
+     * @param renterId Thai national ID or passport ID of the renter
+     * @param rentStartTime Starting time of rent.
+     * @throws RentalException When rented already rented bike
+     */
+    public void rentBikeItem(BikeItem bikeItem, String renterId, Date rentStartTime) throws RentalException, RuntimeException {
+        String oldRenterId = bikeItem.getRenterId();
+        // Empty id must be checked as the importing may use empty string instead.
+        if (oldRenterId != null && !oldRenterId.isEmpty()) {
+            throw new RentalException("The bike is already rented");
+        }
+
+        bikeItem.setRenterId(renterId);
+        bikeItem.setRentStartTime(rentStartTime);
+        try {
+            bikeItemDao.update(bikeItem);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

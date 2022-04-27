@@ -109,4 +109,12 @@ public class BikeItem {
         this.renterId = renterId;
         this.rentStartTime = rentStartTime;
     }
+
+    public void setRenterId(String renterId) {
+        this.renterId = renterId;
+    }
+
+    public void setRentStartTime(Date rentStartTime) {
+        this.rentStartTime = rentStartTime;
+    }
 }
