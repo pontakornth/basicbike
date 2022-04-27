@@ -31,7 +31,7 @@ public class BikeItem {
      * Reference to specification of the bike.
      */
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @Column(nullable = false)
+    @JoinColumn(name = "bike_id")
     private Bike bike;
 
     /**
