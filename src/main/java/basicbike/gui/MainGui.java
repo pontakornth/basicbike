@@ -134,7 +134,6 @@ public class MainGui extends JFrame {
             int result = JOptionPane.showConfirmDialog(null, panel, "Rent",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
-                JOptionPane.showMessageDialog(null, "You didn't select any bike.", "Error", JOptionPane.ERROR_MESSAGE);
                 BikeItem bikeItem = items.get(resultTable.table.getSelectedRow());
                 try {
                     Date rentStartTime = DateUtil.parseDate(timeInput.getText());
@@ -175,6 +174,10 @@ public class MainGui extends JFrame {
     private ListSelectionListener getListSelectionListener() {
         return e -> {
             int selectedColumnIndex = resultTable.table.getSelectedRow();
+            if (selectedColumnIndex == -1) {
+                actionPanel.rentButton.setEnabled(false);
+                return;
+            }
             // TODO: Use different action base on state
             BikeItem selectedBikeItem = items.get(selectedColumnIndex);
             actionPanel.rentButton.setEnabled(true);
