@@ -6,6 +6,7 @@ import basicbike.model.Bike;
 import basicbike.model.BikeItem;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -24,6 +25,7 @@ public class MainGui extends JFrame {
     private final ResultTable resultTable;
     private final ActionPanel actionPanel;
     private final List<BikeItem> items;
+    private int selectedIndex = 1;
 
     private static class FilterPanel extends JPanel {
         public final JLabel modelInputLabel;
@@ -46,13 +48,16 @@ public class MainGui extends JFrame {
         public final JTable table;
         private final String[] columnName;
 
-        public ResultTable(List<BikeItem> bikeItems) {
+        public ResultTable(List<BikeItem> bikeItems, ListSelectionListener listSelectionListener) {
             columnName = new String[]{"Bike ID", "Model", "Type", "Size", "Rate per Hour", "Status"};
             table = new JTable();
             refreshData(bikeItems);
             table.setFillsViewportHeight(true);
             // The table is not editable because it is outside of scope.
             table.setDefaultEditor(Object.class, null);
+            table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            // TODO: Remove testing
+            table.getSelectionModel().addListSelectionListener(listSelectionListener);
             setLayout(new BorderLayout());
             add(new JScrollPane(table), BorderLayout.SOUTH);
         }
@@ -152,7 +157,7 @@ public class MainGui extends JFrame {
         this.bikeRental = new BikeRental(daoFactory.getBikeDao(), daoFactory.getBikeItemDao());
         items = this.bikeRental.getAllBikeItems();
         this.filterPanel = new FilterPanel();
-        this.resultTable = new ResultTable(items);
+        this.resultTable = new ResultTable(items, getListSelectionListener());
         this.actionPanel = new ActionPanel(getRentAction());
         add(filterPanel, BorderLayout.NORTH);
         add(resultTable, BorderLayout.CENTER);
@@ -169,8 +174,25 @@ public class MainGui extends JFrame {
         pack();
     }
 
+    private ListSelectionListener getListSelectionListener() {
+        return e -> {
+            int selectedColumnIndex = resultTable.table.getSelectedRow();
+            // TODO: Use different action base on state
+            BikeItem selectedBikeItem = items.get(selectedColumnIndex);
+            if (selectedBikeItem.isRented()) {
+                actionPanel.rentButton.setText("Return");
+            } else {
+                actionPanel.rentButton.setText("Rent");
+            }
+        };
+    }
+
     public void start() {
         // Load data from database
         setVisible(true);
+    }
+
+    public void setSelectedIndex(int selectedIndex) {
+        this.selectedIndex = selectedIndex;
     }
 }
