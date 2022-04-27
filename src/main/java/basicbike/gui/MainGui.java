@@ -48,7 +48,7 @@ public class MainGui extends JFrame {
 
         public ResultTable(List<BikeItem> bikeItems) {
             // TODO: Make it actually work.
-            columnName = new String[]{"Bike ID", "Model", "Type", "Size", "Status"};
+            columnName = new String[]{"Bike ID", "Model", "Type", "Size", "Rate per Hour", "Status"};
             table = new JTable();
             refreshData(bikeItems);
             table.setFillsViewportHeight(true);
@@ -67,21 +67,22 @@ public class MainGui extends JFrame {
     }
 
     private static Object[][] getDisplayBikeItems(List<BikeItem> bikeItems) {
-        Object[][] data = new Object[bikeItems.size()][5];
+        Object[][] data = new Object[bikeItems.size()][6];
         for (int i = 0; i < bikeItems.size(); i++ ) {
             BikeItem bikeItem = bikeItems.get(i);
-            Object[] row = new Object[5];
+            Object[] row = new Object[6];
             Bike bike = bikeItem.getBike();
             row[0] = bikeItem.getBikeItemId();
             row[1] = bike.getModel();
             row[2] = bike.getType();
             row[3] = bike.getSize();
+            row[4] = bike.getRatePerHour();
             String renterId = bikeItem.getRenterId();
             // Maintenance is outside the scope.
             if (renterId == null || renterId.isEmpty()) {
-                row[4] = "Available";
+                row[5] = "Available";
             } else {
-                row[4] = "Rented";
+                row[5] = "Rented";
             }
             data[i] = row;
         }
@@ -102,17 +103,16 @@ public class MainGui extends JFrame {
 
     private ActionListener getRentAction() {
         return e -> {
-            // TODO: Add checking if the bike is already rented.
             DateFormat timeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             // The constructor automatically set the current time.
             Date currentDate = new Date();
 
-                /*
-                 Note:
-                 Java does not have built-in date picker.
-                 If I add it, it would require another dependency.
-                 I wish to simplify current application.
-                 */
+             /*
+             Note:
+             Java does not have built-in date picker.
+             If I add it, it would require another dependency.
+             I wish to simplify current application.
+             */
             JPanel panel = new JPanel(new GridLayout(0, 2));
             JLabel idLabel = new JLabel("National ID or Passport");
             JTextField idInput = new JTextField();
