@@ -58,9 +58,13 @@ public class BikeRental {
     public void rentBikeItem(BikeItem bikeItem, String renterId, Date rentStartTime) throws RentalException, RuntimeException {
         String oldRenterId = bikeItem.getRenterId();
         // Empty id must be checked as the importing may use empty string instead.
-        if (oldRenterId != null && !oldRenterId.isEmpty()) {
+        if (oldRenterId != null && !oldRenterId.isBlank()) {
             throw new RentalException("The bike is already rented");
         }
+        if (renterId == null || renterId.isBlank()) {
+            throw new RentalException("Cannot use blank ID to rent a bike");
+        }
+        // Both ID types are not verified as it is outside scope of JPA demonstration.
 
         bikeItem.setRenterId(renterId);
         bikeItem.setRentStartTime(rentStartTime);
