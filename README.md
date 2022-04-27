@@ -23,8 +23,10 @@ Mock application for bike renting business. The purpose is for demonstrating usa
    .import data/bike_item.csv bike_item
    ```
 4. After that, the application should have data available.
+5. If you are using Intellij, run `basicbike.Main` in the editor would be the best option.
+   The alternative way is to use `./gradlew run` if you are using other editor.
 
 ## Progress
 - [x] Model and DAOs
-- [ ] Application GUI
+- [x] Application GUI
 - [ ] Application logic
