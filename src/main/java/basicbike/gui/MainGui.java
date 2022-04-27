@@ -44,39 +44,48 @@ public class MainGui extends JFrame {
 
     private static class ResultTable extends JPanel {
         public final JTable table;
+        private final String[] columnName;
 
         public ResultTable(List<BikeItem> bikeItems) {
             // TODO: Make it actually work.
-            String[] columnName = new String[]{"Bike ID", "Model", "Type", "Size", "Status"};
-            // TODO Extract method
-            Object[][] data = new Object[bikeItems.size()][5];
-            for (int i = 0; i < bikeItems.size(); i++ ) {
-                BikeItem bikeItem = bikeItems.get(i);
-                Object[] row = new Object[5];
-                Bike bike = bikeItem.getBike();
-                row[0] = bikeItem.getBikeItemId();
-                row[1] = bike.getModel();
-                row[2] = bike.getType();
-                row[3] = bike.getSize();
-                String renterId = bikeItem.getRenterId();
-                // Maintenance is outside the scope.
-                if (renterId == null || renterId.isEmpty()) {
-                    row[4] = "Available";
-                } else {
-                    row[4] = "Rented";
-                }
-                data[i] = row;
-            }
+            columnName = new String[]{"Bike ID", "Model", "Type", "Size", "Status"};
             table = new JTable();
-            DefaultTableModel model = new DefaultTableModel(data, columnName);
-            table.setModel(model);
-            table.getColumn("Model").setPreferredWidth(200);
+            refreshData(bikeItems);
             table.setFillsViewportHeight(true);
             // The table is not editable because it is outside of scope.
             table.setDefaultEditor(Object.class, null);
             setLayout(new BorderLayout());
             add(new JScrollPane(table), BorderLayout.SOUTH);
         }
+
+        public void refreshData(List<BikeItem> bikeItems) {
+            Object[][] data = getDisplayBikeItems(bikeItems);
+            DefaultTableModel model = new DefaultTableModel(data, columnName);
+            table.setModel(model);
+            table.getColumn("Model").setPreferredWidth(200);
+        }
+    }
+
+    private static Object[][] getDisplayBikeItems(List<BikeItem> bikeItems) {
+        Object[][] data = new Object[bikeItems.size()][5];
+        for (int i = 0; i < bikeItems.size(); i++ ) {
+            BikeItem bikeItem = bikeItems.get(i);
+            Object[] row = new Object[5];
+            Bike bike = bikeItem.getBike();
+            row[0] = bikeItem.getBikeItemId();
+            row[1] = bike.getModel();
+            row[2] = bike.getType();
+            row[3] = bike.getSize();
+            String renterId = bikeItem.getRenterId();
+            // Maintenance is outside the scope.
+            if (renterId == null || renterId.isEmpty()) {
+                row[4] = "Available";
+            } else {
+                row[4] = "Rented";
+            }
+            data[i] = row;
+        }
+        return data;
     }
 
     private static class ActionPanel extends JPanel {
@@ -130,6 +139,7 @@ public class MainGui extends JFrame {
                         String renterId = idInput.getText();
                         bikeRental.rentBikeItem(bikeItem, renterId , rentStartTime);
                         JOptionPane.showMessageDialog(null ,bikeItem.getBike().getModel(), "Success", JOptionPane.INFORMATION_MESSAGE);
+                        resultTable.refreshData(items);
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null , "Error " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     }
