@@ -8,6 +8,7 @@ import basicbike.model.BikeItem;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.DateFormat;
@@ -87,15 +88,22 @@ public class MainGui extends JFrame {
     private static class ActionPanel extends JPanel {
         private final JButton rentButton;
 
-        public ActionPanel() {
+        public ActionPanel(ActionListener rentAction) {
             // TODO: Add button action
             rentButton = new JButton("Rent");
-            rentButton.addActionListener(e -> {
-                // TODO: Add checking if the bike is already rented.
-                DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                // The constructor automatically set the current time.
-                Date currentDate = new Date();
+            rentButton.addActionListener(rentAction);
+            setLayout(new FlowLayout());
+            add(rentButton);
+        }
+    }
+
+    private ActionListener getRentAction() {
+        return e -> {
+            // TODO: Add checking if the bike is already rented.
+            DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            // The constructor automatically set the current time.
+            Date currentDate = new Date();
 
                 /*
                  Note:
@@ -103,32 +111,34 @@ public class MainGui extends JFrame {
                  If I add it, it would require another dependency.
                  I wish to simplify current application.
                  */
-                JPanel panel = new JPanel(new GridLayout(0, 2));
-                JLabel idLabel = new JLabel("National ID or Passport");
-                JTextField idInput = new JTextField();
-                idInput.setColumns(20);
-                JLabel timeLabel = new JLabel("Time");
-                JTextField timeInput = new JTextField();
-                timeInput.setColumns(20);
-                timeInput.setText(timeFormat.format(currentDate));
-                JLabel dateLabel = new JLabel("Date");
-                JTextField dateInput = new JTextField();
-                dateInput.setColumns(20);
-                dateInput.setText(dateFormat.format(currentDate));
+            JPanel panel = new JPanel(new GridLayout(0, 2));
+            JLabel idLabel = new JLabel("National ID or Passport");
+            JTextField idInput = new JTextField();
+            idInput.setColumns(20);
+            JLabel timeLabel = new JLabel("Time");
+            JTextField timeInput = new JTextField();
+            timeInput.setColumns(20);
+            timeInput.setText(timeFormat.format(currentDate));
+            JLabel dateLabel = new JLabel("Date");
+            JTextField dateInput = new JTextField();
+            dateInput.setColumns(20);
+            dateInput.setText(dateFormat.format(currentDate));
 
 
-                panel.add(idLabel);
-                panel.add(idInput);
-                panel.add(dateLabel);
-                panel.add(dateInput);
-                panel.add(timeLabel);
-                panel.add(timeInput);
-                int result = JOptionPane.showConfirmDialog(null, panel, "Rent",
-                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            });
-            setLayout(new FlowLayout());
-            add(rentButton);
-        }
+            panel.add(idLabel);
+            panel.add(idInput);
+            panel.add(dateLabel);
+            panel.add(dateInput);
+            panel.add(timeLabel);
+            panel.add(timeInput);
+            int result = JOptionPane.showConfirmDialog(null, panel, "Rent",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (result == JOptionPane.OK_OPTION) {
+                if (resultTable.table.getSelectedRow() == -1) {
+                    JOptionPane.showMessageDialog(null, "You didn't select any bike.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        };
     }
 
     public MainGui(DaoFactory daoFactory) {
@@ -138,7 +148,7 @@ public class MainGui extends JFrame {
         items = this.bikeRental.getAllBikeItems();
         this.filterPanel = new FilterPanel();
         this.resultTable = new ResultTable(items);
-        this.actionPanel = new ActionPanel();
+        this.actionPanel = new ActionPanel(getRentAction());
         add(filterPanel, BorderLayout.NORTH);
         add(resultTable, BorderLayout.CENTER);
         add(actionPanel, BorderLayout.SOUTH);
