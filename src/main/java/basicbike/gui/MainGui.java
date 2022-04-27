@@ -67,12 +67,6 @@ public class MainGui extends JFrame {
                 }
                 data[i] = row;
             }
-//            Object[][] data = new Object[][]{
-//                    {"A1234", "LA Mountain Kun", "Mountain", 20, "Available"},
-//                    {"A1234", "LA Mountain Kun", "Mountain", 20, "Available"},
-//                    {"A1234", "LA Mountain Kun", "Mountain", 20, "Available"},
-//                    {"A1234", "LA Mountain Kun", "Mountain", 20, "Available"},
-//            };
             table = new JTable();
             DefaultTableModel model = new DefaultTableModel(data, columnName);
             table.setModel(model);
