@@ -194,6 +194,4 @@ public class MainGui extends JFrame {
         setVisible(true);
     }
 
-    public void setSelectedIndex(int selectedIndex) {
-    }
 }
