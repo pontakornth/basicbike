@@ -5,7 +5,6 @@ import basicbike.gui.MainGui;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 
-import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -20,6 +19,7 @@ public class Main {
 
         } catch (Exception e) {
             // If something bad happens, the program must close the connection.
+            e.printStackTrace();
             if (connectionSource != null) {
                 connectionSource.close();
             }

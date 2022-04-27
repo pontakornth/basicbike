@@ -1,24 +1,28 @@
 package basicbike.gui;
 
 import basicbike.dao.DaoFactory;
+import basicbike.domain.BikeRental;
+import basicbike.model.Bike;
+import basicbike.model.BikeItem;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class MainGui extends JFrame {
 
     private final DaoFactory daoFactory;
+    private final BikeRental bikeRental;
     private final FilterPanel filterPanel;
     private final ResultTable resultTable;
     private final ActionPanel actionPanel;
+    private List<BikeItem> items;
 
     private static class FilterPanel extends JPanel {
         public final JLabel modelInputLabel;
@@ -40,16 +44,34 @@ public class MainGui extends JFrame {
     private static class ResultTable extends JPanel {
         public final JTable table;
 
-        public ResultTable() {
+        public ResultTable(List<BikeItem> bikeItems) {
             // TODO: Make it actually work.
             String[] columnName = new String[]{"Bike ID", "Model", "Type", "Size", "Status"};
-            // TODO: Use data from database
-            Object[][] data = new Object[][]{
-                    {"A1234", "LA Mountain Kun", "Mountain", 20, "Available"},
-                    {"A1234", "LA Mountain Kun", "Mountain", 20, "Available"},
-                    {"A1234", "LA Mountain Kun", "Mountain", 20, "Available"},
-                    {"A1234", "LA Mountain Kun", "Mountain", 20, "Available"},
-            };
+            // TODO Extract method
+            Object[][] data = new Object[bikeItems.size()][5];
+            for (int i = 0; i < bikeItems.size(); i++ ) {
+                BikeItem bikeItem = bikeItems.get(i);
+                Object[] row = new Object[5];
+                Bike bike = bikeItem.getBike();
+                row[0] = bikeItem.getBikeItemId();
+                row[1] = bike.getModel();
+                row[2] = bike.getType();
+                row[3] = bike.getSize();
+                String renterId = bikeItem.getRenterId();
+                // Maintenance is outside the scope.
+                if (renterId == null || renterId.isEmpty()) {
+                    row[4] = "Available";
+                } else {
+                    row[4] = "Rented";
+                }
+                data[i] = row;
+            }
+//            Object[][] data = new Object[][]{
+//                    {"A1234", "LA Mountain Kun", "Mountain", 20, "Available"},
+//                    {"A1234", "LA Mountain Kun", "Mountain", 20, "Available"},
+//                    {"A1234", "LA Mountain Kun", "Mountain", 20, "Available"},
+//                    {"A1234", "LA Mountain Kun", "Mountain", 20, "Available"},
+//            };
             table = new JTable();
             DefaultTableModel model = new DefaultTableModel(data, columnName);
             table.setModel(model);
@@ -112,8 +134,10 @@ public class MainGui extends JFrame {
     public MainGui(DaoFactory daoFactory) {
         setLayout(new BorderLayout());
         this.daoFactory = daoFactory;
+        this.bikeRental = new BikeRental(daoFactory.getBikeDao(), daoFactory.getBikeItemDao());
+        items = this.bikeRental.getAllBikeItems();
         this.filterPanel = new FilterPanel();
-        this.resultTable = new ResultTable();
+        this.resultTable = new ResultTable(items);
         this.actionPanel = new ActionPanel();
         add(filterPanel, BorderLayout.NORTH);
         add(resultTable, BorderLayout.CENTER);
@@ -131,6 +155,7 @@ public class MainGui extends JFrame {
     }
 
     public void start() {
+        // Load data from database
         setVisible(true);
     }
 }
