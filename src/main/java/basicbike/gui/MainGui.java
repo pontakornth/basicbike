@@ -136,6 +136,9 @@ public class MainGui extends JFrame {
             if (result == JOptionPane.OK_OPTION) {
                 if (resultTable.table.getSelectedRow() == -1) {
                     JOptionPane.showMessageDialog(null, "You didn't select any bike.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    BikeItem bikeItem = items.get(resultTable.table.getSelectedRow());
+                    JOptionPane.showMessageDialog(null ,bikeItem.getBike().getModel(), "Success", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         };
