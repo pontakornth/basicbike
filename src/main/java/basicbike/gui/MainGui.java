@@ -99,6 +99,8 @@ public class MainGui extends JFrame {
         public ActionPanel(ActionListener rentAction) {
             rentButton = new JButton("Rent");
             rentButton.addActionListener(rentAction);
+            // It does not make sense if the button is enabled when nothing is selected.
+            rentButton.setEnabled(false);
             setLayout(new FlowLayout());
             add(rentButton);
         }
@@ -179,6 +181,7 @@ public class MainGui extends JFrame {
             int selectedColumnIndex = resultTable.table.getSelectedRow();
             // TODO: Use different action base on state
             BikeItem selectedBikeItem = items.get(selectedColumnIndex);
+            actionPanel.rentButton.setEnabled(true);
             if (selectedBikeItem.isRented()) {
                 actionPanel.rentButton.setText("Return");
             } else {
