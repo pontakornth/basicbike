@@ -75,4 +75,28 @@ public class BikeRental {
         }
 
     }
+
+    /**
+     * Return the bike item and calculate fee based on rate per hour.
+     * @param bikeItem BikeItem to return
+     * @param rentEndTime Time at the end
+     * @return fee based on rate per hour
+     */
+    public int returnBikeItem(BikeItem bikeItem, Date rentEndTime) throws RentalException, RuntimeException {
+        Date startTime = bikeItem.getRentStartTime();
+        if (startTime == null)
+            throw new RentalException("Cannot return available bike");
+        long timeDifference = rentEndTime.getTime() - startTime.getTime();
+        if (timeDifference < 0)
+            throw new RentalException("Cannot return bike before rental");
+        bikeItem.setRenterId(null);
+        bikeItem.setRentStartTime(null);
+        try {
+            bikeItemDao.update(bikeItem);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        int hourDifference = (int) Math.ceil((timeDifference / 1000d) / 3600d);
+        return hourDifference * bikeItem.getBike().getRatePerHour();
+    }
 }

@@ -2,6 +2,7 @@ package basicbike.gui;
 
 import basicbike.dao.DaoFactory;
 import basicbike.domain.BikeRental;
+import basicbike.domain.RentalException;
 import basicbike.model.Bike;
 import basicbike.model.BikeItem;
 import basicbike.util.DateUtil;
@@ -117,32 +118,52 @@ public class MainGui extends JFrame {
              If I add it, it would require another dependency.
              I wish to simplify current application.
              */
-            JPanel panel = new JPanel(new GridLayout(0, 2));
-            JLabel idLabel = new JLabel("National ID or Passport");
-            JTextField idInput = new JTextField();
-            idInput.setColumns(20);
-            JLabel timeLabel = new JLabel("Time " + DateUtil.getDateFormat());
-            JTextField timeInput = new JTextField();
-            timeInput.setColumns(20);
-            timeInput.setText(DateUtil.dateToString(currentDate));
+            BikeItem bikeItem = items.get(resultTable.table.getSelectedRow());
+            if (!bikeItem.isRented()) {
+                // Unrented logic
+                JPanel panel = new JPanel(new GridLayout(0, 2));
+                JLabel idLabel = new JLabel("National ID or Passport");
+                JTextField idInput = new JTextField();
+                idInput.setColumns(20);
+                JLabel timeLabel = new JLabel("Time " + DateUtil.getDateFormat());
+                JTextField timeInput = new JTextField();
+                timeInput.setColumns(20);
+                timeInput.setText(DateUtil.dateToString(currentDate));
 
 
-            panel.add(idLabel);
-            panel.add(idInput);
-            panel.add(timeLabel);
-            panel.add(timeInput);
-            int result = JOptionPane.showConfirmDialog(null, panel, "Rent",
-                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            if (result == JOptionPane.OK_OPTION) {
-                BikeItem bikeItem = items.get(resultTable.table.getSelectedRow());
-                try {
-                    Date rentStartTime = DateUtil.parseDate(timeInput.getText());
-                    String renterId = idInput.getText();
-                    bikeRental.rentBikeItem(bikeItem, renterId , rentStartTime);
-                    JOptionPane.showMessageDialog(null ,bikeItem.getBike().getModel(), "Success", JOptionPane.INFORMATION_MESSAGE);
-                    resultTable.refreshData(items);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null , "Error " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                panel.add(idLabel);
+                panel.add(idInput);
+                panel.add(timeLabel);
+                panel.add(timeInput);
+                int result = JOptionPane.showConfirmDialog(null, panel, "Rent",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                if (result == JOptionPane.OK_OPTION) {
+                    try {
+                        Date rentStartTime = DateUtil.parseDate(timeInput.getText());
+                        String renterId = idInput.getText();
+                        bikeRental.rentBikeItem(bikeItem, renterId , rentStartTime);
+                        JOptionPane.showMessageDialog(null ,bikeItem.getBike().getModel(), "Success", JOptionPane.INFORMATION_MESSAGE);
+                        resultTable.refreshData(items);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null , "Error " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            } else {
+                // Rented logic
+                String confirmMessage = String.format("Returning %s from %s, are you sure?",
+                        bikeItem.getBikeItemId(),
+                        bikeItem.getRenterId()
+                        );
+                int result = JOptionPane.showConfirmDialog(null, confirmMessage, "Return", JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION) {
+                    try {
+                        int fee = bikeRental.returnBikeItem(bikeItem, currentDate);
+                        String infoMessage = String.format("Your fee is %d baht.", fee);
+                        JOptionPane.showMessageDialog(null, infoMessage, "Fee", JOptionPane.INFORMATION_MESSAGE);
+                        resultTable.refreshData(items);
+                    } catch (RentalException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             }
         };
@@ -150,6 +171,7 @@ public class MainGui extends JFrame {
 
     public MainGui(DaoFactory daoFactory) {
         setLayout(new BorderLayout());
+        setTitle("BasicBike");
         this.daoFactory = daoFactory;
         this.bikeRental = new BikeRental(daoFactory.getBikeDao(), daoFactory.getBikeItemDao());
         items = this.bikeRental.getAllBikeItems();
