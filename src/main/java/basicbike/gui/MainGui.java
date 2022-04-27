@@ -47,7 +47,6 @@ public class MainGui extends JFrame {
         private final String[] columnName;
 
         public ResultTable(List<BikeItem> bikeItems) {
-            // TODO: Make it actually work.
             columnName = new String[]{"Bike ID", "Model", "Type", "Size", "Rate per Hour", "Status"};
             table = new JTable();
             refreshData(bikeItems);
@@ -93,7 +92,6 @@ public class MainGui extends JFrame {
         private final JButton rentButton;
 
         public ActionPanel(ActionListener rentAction) {
-            // TODO: Add button action
             rentButton = new JButton("Rent");
             rentButton.addActionListener(rentAction);
             setLayout(new FlowLayout());
