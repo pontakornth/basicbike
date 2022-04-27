@@ -5,6 +5,7 @@ import basicbike.dao.BikeItemDao;
 import basicbike.model.Bike;
 import basicbike.model.BikeItem;
 import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.SelectArg;
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -48,6 +49,29 @@ public class BikeRental {
         }
     }
 
+    /**
+     * Get list of bike items by model name
+     * @param modelName Model name of the bike
+     * @return BikeItems with matched model name
+     */
+    public List<BikeItem> getBikeItemByModelName(String modelName) {
+        try {
+            QueryBuilder<Bike, Long> bikeQueryBuilder = bikeDao.queryBuilder();
+            SelectArg selectArg = new SelectArg();
+            selectArg.setValue("%" + modelName + "%");
+            bikeQueryBuilder.where().like("model", selectArg);
+            QueryBuilder<BikeItem, Long> bikeItemQueryBuilder = bikeItemDao.queryBuilder();
+            bikeItemQueryBuilder.join("bike_id", "id", bikeQueryBuilder);
+            bikeItemQueryBuilder.prepare();
+            List<BikeItem> bikeItems = bikeItemQueryBuilder.query();
+            for (BikeItem bikeItem: bikeItems) {
+                bikeDao.refresh(bikeItem.getBike());
+            }
+            return bikeItems;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
      * Rent the bike item on specific date.
      * @param bikeItem BikeItem to rent
@@ -99,4 +123,5 @@ public class BikeRental {
         int hourDifference = (int) Math.ceil((timeDifference / 1000d) / 3600d);
         return hourDifference * bikeItem.getBike().getRatePerHour();
     }
+
 }

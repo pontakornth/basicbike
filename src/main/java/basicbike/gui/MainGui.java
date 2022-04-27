@@ -14,8 +14,6 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -26,18 +24,19 @@ public class MainGui extends JFrame {
     private final FilterPanel filterPanel;
     private final ResultTable resultTable;
     private final ActionPanel actionPanel;
-    private final List<BikeItem> items;
+    private List<BikeItem> items;
 
     private static class FilterPanel extends JPanel {
         public final JLabel modelInputLabel;
         public final JTextField modelInput;
         public final JButton searchButton;
 
-        public FilterPanel() {
+        public FilterPanel(ActionListener searchAction) {
             setLayout(new FlowLayout());
             modelInputLabel = new JLabel("Model: ");
             modelInput = new JTextField(25);
             searchButton = new JButton("Search");
+            searchButton.addActionListener(searchAction);
             add(modelInputLabel);
             add(modelInput);
             add(searchButton);
@@ -169,13 +168,25 @@ public class MainGui extends JFrame {
         };
     }
 
+    private ActionListener getSearchAction() {
+        return e -> {
+            String queryText = filterPanel.modelInput.getText();
+            if (queryText.isBlank()) {
+                items = bikeRental.getAllBikeItems();
+            } else {
+                items = bikeRental.getBikeItemByModelName(queryText);
+            }
+            resultTable.refreshData(items);
+        };
+    }
+
     public MainGui(DaoFactory daoFactory) {
         setLayout(new BorderLayout());
         setTitle("BasicBike");
         this.daoFactory = daoFactory;
         this.bikeRental = new BikeRental(daoFactory.getBikeDao(), daoFactory.getBikeItemDao());
         items = this.bikeRental.getAllBikeItems();
-        this.filterPanel = new FilterPanel();
+        this.filterPanel = new FilterPanel(getSearchAction());
         this.resultTable = new ResultTable(items, getListSelectionListener());
         this.actionPanel = new ActionPanel(getButtonAction());
         add(filterPanel, BorderLayout.NORTH);
