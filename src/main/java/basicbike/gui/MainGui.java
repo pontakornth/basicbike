@@ -4,6 +4,7 @@ import basicbike.dao.DaoFactory;
 import basicbike.domain.BikeRental;
 import basicbike.model.Bike;
 import basicbike.model.BikeItem;
+import basicbike.util.DateUtil;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
@@ -105,9 +106,8 @@ public class MainGui extends JFrame {
         }
     }
 
-    private ActionListener getRentAction() {
+    private ActionListener getButtonAction() {
         return e -> {
-            DateFormat timeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             // The constructor automatically set the current time.
             Date currentDate = new Date();
 
@@ -121,10 +121,10 @@ public class MainGui extends JFrame {
             JLabel idLabel = new JLabel("National ID or Passport");
             JTextField idInput = new JTextField();
             idInput.setColumns(20);
-            JLabel timeLabel = new JLabel("Time");
+            JLabel timeLabel = new JLabel("Time " + DateUtil.getDateFormat());
             JTextField timeInput = new JTextField();
             timeInput.setColumns(20);
-            timeInput.setText(timeFormat.format(currentDate));
+            timeInput.setText(DateUtil.dateToString(currentDate));
 
 
             panel.add(idLabel);
@@ -134,19 +134,16 @@ public class MainGui extends JFrame {
             int result = JOptionPane.showConfirmDialog(null, panel, "Rent",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
-                if (resultTable.table.getSelectedRow() == -1) {
-                    JOptionPane.showMessageDialog(null, "You didn't select any bike.", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    BikeItem bikeItem = items.get(resultTable.table.getSelectedRow());
-                    try {
-                        Date rentStartTime = timeFormat.parse(timeInput.getText());
-                        String renterId = idInput.getText();
-                        bikeRental.rentBikeItem(bikeItem, renterId , rentStartTime);
-                        JOptionPane.showMessageDialog(null ,bikeItem.getBike().getModel(), "Success", JOptionPane.INFORMATION_MESSAGE);
-                        resultTable.refreshData(items);
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null , "Error " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                    }
+                JOptionPane.showMessageDialog(null, "You didn't select any bike.", "Error", JOptionPane.ERROR_MESSAGE);
+                BikeItem bikeItem = items.get(resultTable.table.getSelectedRow());
+                try {
+                    Date rentStartTime = DateUtil.parseDate(timeInput.getText());
+                    String renterId = idInput.getText();
+                    bikeRental.rentBikeItem(bikeItem, renterId , rentStartTime);
+                    JOptionPane.showMessageDialog(null ,bikeItem.getBike().getModel(), "Success", JOptionPane.INFORMATION_MESSAGE);
+                    resultTable.refreshData(items);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null , "Error " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         };
@@ -159,7 +156,7 @@ public class MainGui extends JFrame {
         items = this.bikeRental.getAllBikeItems();
         this.filterPanel = new FilterPanel();
         this.resultTable = new ResultTable(items, getListSelectionListener());
-        this.actionPanel = new ActionPanel(getRentAction());
+        this.actionPanel = new ActionPanel(getButtonAction());
         add(filterPanel, BorderLayout.NORTH);
         add(resultTable, BorderLayout.CENTER);
         add(actionPanel, BorderLayout.SOUTH);
