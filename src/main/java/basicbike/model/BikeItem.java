@@ -92,6 +92,10 @@ public class BikeItem {
         return renterId;
     }
 
+    public boolean isRented() {
+        return renterId != null && !renterId.isBlank();
+    }
+
     public Date getRentStartTime() {
         return rentStartTime;
     }
