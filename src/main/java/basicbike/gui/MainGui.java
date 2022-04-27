@@ -4,13 +4,14 @@ import basicbike.dao.DaoFactory;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainGui extends JFrame {
 
@@ -38,6 +39,7 @@ public class MainGui extends JFrame {
 
     private static class ResultTable extends JPanel {
         public final JTable table;
+
         public ResultTable() {
             // TODO: Make it actually work.
             String[] columnName = new String[]{"Bike ID", "Model", "Type", "Size", "Status"};
@@ -66,24 +68,41 @@ public class MainGui extends JFrame {
         public ActionPanel() {
             // TODO: Add button action
             rentButton = new JButton("Rent");
-            rentButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // TODO: Add checking if the bike is already rented.
-                    JPanel panel = new JPanel(new GridLayout(3,2));
-                    JLabel idLabel = new JLabel("National ID or Passport");
-                    JTextField idInput = new JTextField();
-                    idInput.setColumns(20);
-                    JLabel timeLabel = new JLabel("Time");
-                    JTextField timeInput = new JTextField();
-                    timeInput.setColumns(20);
-                    panel.add(idLabel);
-                    panel.add(idInput);
-                    panel.add(timeLabel);
-                    panel.add(timeInput);
-                    int result = JOptionPane.showConfirmDialog(null, panel, "Rent",
-                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                }
+            rentButton.addActionListener(e -> {
+                // TODO: Add checking if the bike is already rented.
+                DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                // The constructor automatically set the current time.
+                Date currentDate = new Date();
+
+                /*
+                 Note:
+                 Java does not have built-in date picker.
+                 If I add it, it would require another dependency.
+                 I wish to simplify current application.
+                 */
+                JPanel panel = new JPanel(new GridLayout(0, 2));
+                JLabel idLabel = new JLabel("National ID or Passport");
+                JTextField idInput = new JTextField();
+                idInput.setColumns(20);
+                JLabel timeLabel = new JLabel("Time");
+                JTextField timeInput = new JTextField();
+                timeInput.setColumns(20);
+                timeInput.setText(timeFormat.format(currentDate));
+                JLabel dateLabel = new JLabel("Date");
+                JTextField dateInput = new JTextField();
+                dateInput.setColumns(20);
+                dateInput.setText(dateFormat.format(currentDate));
+
+
+                panel.add(idLabel);
+                panel.add(idInput);
+                panel.add(dateLabel);
+                panel.add(dateInput);
+                panel.add(timeLabel);
+                panel.add(timeInput);
+                int result = JOptionPane.showConfirmDialog(null, panel, "Rent",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             });
             setLayout(new FlowLayout());
             add(rentButton);
