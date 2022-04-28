@@ -209,7 +209,6 @@ public class MainGui extends JFrame {
                 actionPanel.rentButton.setEnabled(false);
                 return;
             }
-            // TODO: Use different action base on state
             BikeItem selectedBikeItem = items.get(selectedColumnIndex);
             actionPanel.rentButton.setEnabled(true);
             if (selectedBikeItem.isRented()) {
