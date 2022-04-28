@@ -21,7 +21,10 @@ Mock application for bike renting business. The purpose is for demonstrating usa
    .mode csv
    .import data/bike.csv bike
    .import data/bike_item.csv bike_item
+   
+   UPDATE bike_item SET renterId = NULL, rentStartTime = NULL;
    ```
+   CSV import empty column and make it empty string instead of NULL.
 4. Next, create `config.properties` in `./src/main/resources/` folder. 
    After that, put location of database file in the config file.
    ```properties
