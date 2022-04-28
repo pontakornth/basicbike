@@ -51,11 +51,11 @@ public class BikeRental {
     }
 
     /**
-     * Get list of bike items by model name
+     * Get list of bike items matched with model name
      * @param modelName Model name of the bike
      * @return BikeItems with matched model name
      */
-    public List<BikeItem> getBikeItemByModelName(String modelName) {
+    public List<BikeItem> getBikeItemsByModelName(String modelName) {
         try {
             QueryBuilder<Bike, Long> bikeQueryBuilder = bikeDao.queryBuilder();
             SelectArg selectArg = new SelectArg();

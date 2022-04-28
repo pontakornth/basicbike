@@ -173,7 +173,7 @@ public class MainGui extends JFrame {
             if (queryText.isBlank()) {
                 items = bikeRental.getAllBikeItems();
             } else {
-                items = bikeRental.getBikeItemByModelName(queryText);
+                items = bikeRental.getBikeItemsByModelName(queryText);
             }
             resultTable.refreshData(items);
         };
