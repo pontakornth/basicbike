@@ -2,6 +2,7 @@ package basicbike.domain;
 
 import basicbike.dao.BikeDao;
 import basicbike.dao.BikeItemDao;
+import basicbike.dao.DaoFactory;
 import basicbike.model.Bike;
 import basicbike.model.BikeItem;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -21,9 +22,9 @@ public class BikeRental {
     private final BikeDao bikeDao;
     private final BikeItemDao bikeItemDao;
 
-    public BikeRental(BikeDao bikeDao, BikeItemDao bikeItemDao) {
-        this.bikeDao = bikeDao;
-        this.bikeItemDao = bikeItemDao;
+    public BikeRental(DaoFactory daoFactory) {
+        this.bikeDao = daoFactory.getBikeDao();
+        this.bikeItemDao = daoFactory.getBikeItemDao();
     }
 
     /**

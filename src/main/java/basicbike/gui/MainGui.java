@@ -19,7 +19,6 @@ import java.util.List;
 
 public class MainGui extends JFrame {
 
-    private final DaoFactory daoFactory;
     private final BikeRental bikeRental;
     private final FilterPanel filterPanel;
     private final ResultTable resultTable;
@@ -183,8 +182,7 @@ public class MainGui extends JFrame {
     public MainGui(DaoFactory daoFactory) {
         setLayout(new BorderLayout());
         setTitle("BasicBike");
-        this.daoFactory = daoFactory;
-        this.bikeRental = new BikeRental(daoFactory.getBikeDao(), daoFactory.getBikeItemDao());
+        this.bikeRental = new BikeRental(daoFactory);
         items = this.bikeRental.getAllBikeItems();
         this.filterPanel = new FilterPanel(getSearchAction());
         this.resultTable = new ResultTable(items, getListSelectionListener());
