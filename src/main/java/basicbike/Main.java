@@ -12,7 +12,6 @@ import java.util.Properties;
 public class Main {
     public static void main(String[] args) throws Exception {
         ConnectionSource connectionSource = null;
-        InputStream inputStream;
         try {
             String configFileLocation = "config.properties";
             Properties p = new Properties();
