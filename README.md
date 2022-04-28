@@ -22,11 +22,15 @@ Mock application for bike renting business. The purpose is for demonstrating usa
    .import data/bike.csv bike
    .import data/bike_item.csv bike_item
    ```
-4. After that, the application should have data available.
+4. Next, create `config.properties` in `./src/main/resources/` folder. 
+   After that, put location of database file in the config file.
+   ```properties
+   databaseFile=database.db
+   ```
 5. If you are using Intellij, run `basicbike.Main` in the editor would be the best option.
    The alternative way is to use `./gradlew run` if you are using other editor.
 
 ## Progress
 - [x] Model and DAOs
 - [x] Application GUI
-- [ ] Application logic
+- [x] Application logic
