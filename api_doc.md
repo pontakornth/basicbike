@@ -28,7 +28,7 @@ In this context, it means physical bike with rental status. Each bike has
 a ID and item ID prefixed with BB.
 
 | name            | type      | description               |
------------------------------------------------------------
+|-----------------|-----------|---------------------------|
 | `id`            | `int`     | ID used to identify bike. |
 | `bikeId`        | `string`  | Item ID of the bike       |
 | `model`         | `string`  | Model of the bike         |
@@ -39,7 +39,7 @@ a ID and item ID prefixed with BB.
 To rent a bike, users must submit a rental request.
 
 | name            | type     | description                                                             |
---------------------------------------------------------------------------------------------------------
+|-----------------|----------|-------------------------------------------------------------------------|
 | `bikeId`        | `string` | ID of the bike to rent.                                                 |
 | `renterId`      | `string` | ID of the renter. It can be either Thai national ID or passport number. |
 | `rentStartTime` | `string` | Starting time of rental.                                                | 
@@ -58,7 +58,7 @@ POST /token/
 Must be passed in request body in JSON format.
 
 | name       | type   | description                            |
---------------------------------------------------------------
+|------------|--------|----------------------------------------|
 | `username` | string | Username given upon staff registration |
 | `password` | string | Password of the username               |
 
