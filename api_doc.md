@@ -172,3 +172,49 @@ Status code 404
   "message": "Bike not found"
 }
 ```
+
+### Return a bike
+
+```http request
+PUT /bikes/{id}
+```
+
+Users must send a return request. The return request is similar to [rental request](#rental-request) 
+but users provide `rentEndTime` instead.
+
+The reason that ending time must be sent manually is to allow the request to be sent later. If the time is
+determined by the server, delay might cost renter more.
+
+#### Request
+
+A return request must be provided in the request body. 
+
+```json
+{
+  "renterId": "1111111111111",
+  "rentEndTime": "12/12/2022 08:00:00"
+}
+```
+
+#### Response
+
+The response contains status, cost, and error message if there is any.
+
+Status 200
+
+```json
+{
+  "status": "success",
+  "cost": 120
+}
+```
+
+Status 404
+
+```json
+{
+  "status": "error",
+  "message": "Bike not found"
+}
+```
+
