@@ -40,7 +40,6 @@ To rent a bike, users must submit a rental request.
 
 | name            | type     | description                                                             |
 |-----------------|----------|-------------------------------------------------------------------------|
-| `bikeId`        | `string` | ID of the bike to rent.                                                 |
 | `renterId`      | `string` | ID of the renter. It can be either Thai national ID or passport number. |
 | `rentStartTime` | `string` | Starting time of rental.                                                | 
 
@@ -126,3 +125,50 @@ Status code 401
 ### Rent a bike
 
 Send a rental request to rent a bike
+
+```http request
+POST /bikes/{id}
+```
+
+`id` is the bike ID of bike to rent.
+
+#### Request
+
+Users must send a [rental request](#rental-request) in the request body.
+
+```json
+{
+  "renterId": "1111111111111",
+  "rentStartTime": "12/12/2022 08:00:00"
+}
+```
+
+#### Response
+
+The response is a message indicating either success or failure.
+
+Status code 200
+
+```json
+{
+  "status": "success"
+}
+```
+
+Status code 401
+
+```json
+{
+  "status": "error",
+  "message": "Unauthorized"
+}
+```
+
+Status code 404
+
+```json
+{
+  "status": "error",
+  "message": "Bike not found"
+}
+```
