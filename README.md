@@ -37,3 +37,9 @@ Mock application for bike renting business. The purpose is for demonstrating usa
 - [x] Model and DAOs
 - [x] Application GUI
 - [x] Application logic
+
+## API documentation
+
+Use [api_doc.md](api_doc.md) to view API documentation in markdown format.
+
+The YAML format is not complete.
