@@ -30,10 +30,10 @@ a ID and item ID prefixed with BB.
 | name            | type      | description               |
 |-----------------|-----------|---------------------------|
 | `id`            | `int`     | ID used to identify bike. |
-| `bikeId`        | `string`  | Item ID of the bike       |
-| `model`         | `string`  | Model of the bike         |
-| `isRented`      | `boolean` | Status of rental          |
-| `rentStartTime` | `string`  | Starting time of rental   |
+| `bikeId`        | `string`  | Item ID of the bike.      |
+| `model`         | `string`  | Model of the bike.        |
+| `isRented`      | `boolean` | Status of rental.         |
+| `rentStartTime` | `string`  | Starting time of rental.  |
 
 ### Rental request
 To rent a bike, users must submit a rental request.
@@ -41,7 +41,14 @@ To rent a bike, users must submit a rental request.
 | name            | type     | description                                                             |
 |-----------------|----------|-------------------------------------------------------------------------|
 | `renterId`      | `string` | ID of the renter. It can be either Thai national ID or passport number. |
-| `rentStartTime` | `string` | Starting time of rental.                                                | 
+| `rentStartTime` | `string` | Starting time of rental. (dd/MM/yyyy HH:mm:ss)                          | 
+
+### Return request
+
+| name          | type     | description                                                             |
+|---------------|----------|-------------------------------------------------------------------------|
+| `renterId`    | `string` | ID of the renter. It can be either Thai national ID or passport number. |
+| `rentEndTime` | `string` | Ending time of rental. (dd/MM/yyyy HH:mm:ss)                            |
 
 ## API endpoints
 
@@ -56,10 +63,10 @@ POST /token/
 #### Request parameters
 Must be passed in request body in JSON format.
 
-| name       | type   | description                            |
-|------------|--------|----------------------------------------|
-| `username` | string | Username given upon staff registration |
-| `password` | string | Password of the username               |
+| name       | type   | description                             |
+|------------|--------|-----------------------------------------|
+| `username` | string | Username given upon staff registration. |
+| `password` | string | Password of the username.               |
 
 #### Response
 
@@ -132,7 +139,7 @@ POST /bikes/{id}
 
 `id` is the bike ID of bike to rent.
 
-#### Request
+#### Request parameters
 
 Users must send a [rental request](#rental-request) in the request body.
 
@@ -185,7 +192,7 @@ but users provide `rentEndTime` instead.
 The reason that ending time must be sent manually is to allow the request to be sent later. If the time is
 determined by the server, delay might cost renter more.
 
-#### Request
+#### Request parameters
 
 A return request must be provided in the request body. 
 
