@@ -9,7 +9,7 @@ There is no bike management API as it is outside the scope.
 - This API is intended for staffs working for BasicBike. Therefore, users must
   authenticate before requesting any endpoint except for getting the token.
 - Registration of staffs are not handled by this API. Users can only get token from
-  given username and password. Users can change password in this API.
+  given username and password. 
 
 
 ## Authentication
