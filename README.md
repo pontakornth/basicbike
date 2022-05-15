@@ -41,3 +41,7 @@ Mock application for bike renting business. The purpose is for demonstrating usa
 ## API documentation
 
 Use [api_doc.md](api_doc.md) to view API documentation in markdown format.
+
+## UML Diagram 
+
+It's in [Homework 14 UML.drawio.png](https://github.com/pontakornth/basicbike/blob/main/Homework%2014%20UML.drawio.png) file.
