@@ -1,0 +1,71 @@
+21/5/2022 (Jim)
+===============
+### Main
+1. In Main, define a separate method to get the properties.
+   Alternatively, create a singleton PropertyManager class for that.
+
+2. Low Coupling: Main should NOT depend on ORMlite classes.
+
+   Move the creation of ConnectionSource from Main to DaoFactory.
+
+3. Main.main does not throw Exception, so remove the "throws Exception"
+
+### DaoFactory
+1. Creator & Low Coupling: Let DaoFactory create the ConnectionSource itself,
+   instead of doing it in Main.
+
+2. Use PV for database URL.  Your code should not depend on using sqlite,
+   so don't hardcode "jdbc:sqlite" in code.
+   Get the entire URL as a property. 
+
+### Exception When Running Application
+Both Saruj and I get this exception:
+
+```
+java.lang.RuntimeException: java.sql.SQLException: Problems with column 4 parsing date-string '' using 'yyyy-MM-dd HH:mm:ss.SSSSSS'
+	at basicbike.domain.BikeRental.getAllBikeItems(BikeRental.java:49)
+	at basicbike.gui.MainGui.<init>(MainGui.java:186)
+	at basicbike.Main.main(Main.java:51)
+Caused by: java.sql.SQLException: Problems with column 4 parsing date-string '' using 'yyyy-MM-dd HH:mm:ss.SSSSSS'
+	at com.j256.ormlite.field.types.DateStringType.sqlArgToJava(DateStringType.java:63)
+	at com.j256.ormlite.field.BaseFieldConverter.resultToJava(BaseFieldConverter.java:30)
+	at com.j256.ormlite.field.FieldType.resultToJava(FieldType.java:863)
+	at com.j256.ormlite.stmt.mapped.BaseMappedQuery.mapRow(BaseMappedQuery.java:62)
+	at com.j256.ormlite.stmt.SelectIterator.getCurrent(SelectIterator.java:290)
+	at com.j256.ormlite.stmt.SelectIterator.nextThrow(SelectIterator.java:163)
+	at com.j256.ormlite.stmt.StatementExecutor.query(StatementExecutor.java:207)
+	at com.j256.ormlite.stmt.StatementExecutor.queryForAll(StatementExecutor.java:127)
+	at com.j256.ormlite.dao.BaseDaoImpl.queryForAll(BaseDaoImpl.java:251)
+	at basicbike.domain.BikeRental.getAllBikeItems(BikeRental.java:39)
+	... 2 more
+Caused by: java.text.ParseException: Unparseable date: ""
+	at java.base/java.text.DateFormat.parse(DateFormat.java:396)
+	at com.j256.ormlite.field.types.BaseDateType.parseDateString(BaseDateType.java:46)
+	at com.j256.ormlite.field.types.DateStringType.sqlArgToJava(DateStringType.java:61)
+	... 11 more
+```
+
+You need to be careful with datetime objects. In your app, the rentStartTime may be empty or null.  
+
+I think you should explicitly specify the date-time format and use the SQL Timestamp format "yyyy-MM-dd hh:mm:ss".  To avoid exceptions, parse the string yourself in code.  Or always set it to a valid value (your code sets it to null).
+Java timestamps sometimes default to "yyyy-MM-ddThh:mm:ss" so be careful.
+
+To get your code to work without a lot of changes, I modified 
+BikeItem as follows:
+
+1. Change the attribute `rentStartTime` to String (instead of Date) and 
+   change the ORMLite annotation to String, too.
+2. In the get method, convert from String to java.util.Date.
+3. In the set method, conert from java.util.Date to String.
+4. Use a SimpleDateFormat object to perform conversions, and explicitly define a DATE_FORMAT.  I set DATE_FORMAT to match the short SQL timestamp format, shown above.  You can see these defined staticly at the top of the BikeItem class.
+
+
+### General
+
+1. RuntimeException is an unchecked exception, so your methods do
+   not need to declare "throws RuntimeException".
+
+   Any method that uses an object reference can potentially raise
+   a NullPointerException, so if we had to write "throws RuntimeException"
+   then it would be everywhere!
+
